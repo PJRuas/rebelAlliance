@@ -1,8 +1,8 @@
-package com.rebels.alliance.gateways.implementations;
+package com.rebels.alliance.gateways.implementations.collection;
 
-import com.rebels.alliance.domains.models.DTOs.RebelDTO;
-import com.rebels.alliance.domains.models.Rebel;
+import com.rebels.alliance.domains.Rebel;
 import com.rebels.alliance.gateways.RebelGateway;
+import com.rebels.alliance.gateways.controllers.requests.RebelRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
@@ -43,7 +43,7 @@ public class RebelRepositoryCollection implements RebelGateway {
     }
 
     @Override
-    public Rebel updateRebel(RebelDTO rebel) {
+    public Rebel updateRebel(RebelRequest rebel) {
         for (Rebel rb : rebels) {
             if (Objects.equals(rb.getId(), rebel.getId())) {
                 BeanUtils.copyProperties(rebel, rb);

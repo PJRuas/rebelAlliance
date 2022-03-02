@@ -1,11 +1,11 @@
-package com.rebels.alliance.domains.models.DTOs;
+package com.rebels.alliance.gateways.controllers.requests;
 
-import com.rebels.alliance.domains.models.Inventory;
-import com.rebels.alliance.domains.models.Location;
+import com.rebels.alliance.domains.Inventory;
+import com.rebels.alliance.domains.Location;
 import lombok.Data;
 
 @Data
-public class RebelDTO {
+public class RebelRequest {
     private Inventory inventory;
     private String id;
     private String name;

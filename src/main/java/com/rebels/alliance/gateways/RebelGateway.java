@@ -1,7 +1,7 @@
 package com.rebels.alliance.gateways;
 
-import com.rebels.alliance.domains.models.DTOs.RebelDTO;
-import com.rebels.alliance.domains.models.Rebel;
+import com.rebels.alliance.domains.Rebel;
+import com.rebels.alliance.gateways.controllers.requests.RebelRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -19,5 +19,5 @@ public interface RebelGateway {
 
     List<Rebel> findByParam(Predicate<? super Rebel> parameter);
 
-    Rebel updateRebel(RebelDTO rebel);
+    Rebel updateRebel(RebelRequest rebel);
 }
