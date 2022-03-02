@@ -1,8 +1,8 @@
 package com.rebels.alliance.usecases;
 
-import com.rebels.alliance.domains.models.DTOs.RebelDTO;
-import com.rebels.alliance.domains.models.Rebel;
+import com.rebels.alliance.domains.Rebel;
 import com.rebels.alliance.gateways.RebelGateway;
+import com.rebels.alliance.gateways.controllers.requests.RebelRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class RebelService {
         return rebelGateway.register(rebel);
     }
 
-    public Rebel updateRebel(RebelDTO rebel) {
+    public Rebel updateRebel(RebelRequest rebel) {
         return rebelGateway.updateRebel(rebel);
     }
 

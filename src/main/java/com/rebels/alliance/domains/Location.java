@@ -1,4 +1,4 @@
-package com.rebels.alliance.domains.models;
+package com.rebels.alliance.domains;
 
 public class Location {
     String galaxyName;

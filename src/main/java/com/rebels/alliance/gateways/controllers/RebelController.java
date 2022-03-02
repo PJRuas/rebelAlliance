@@ -1,8 +1,8 @@
-package com.rebels.alliance.controllers;
+package com.rebels.alliance.gateways.controllers;
 
-import com.rebels.alliance.domains.models.DTOs.RebelDTO;
-import com.rebels.alliance.domains.models.Rebel;
-import com.rebels.alliance.gateways.implementations.RebelRepositoryCollection;
+import com.rebels.alliance.domains.Rebel;
+import com.rebels.alliance.gateways.controllers.requests.RebelRequest;
+import com.rebels.alliance.gateways.implementations.collection.RebelRepositoryCollection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -41,7 +41,7 @@ public class RebelController {
     }
 
     @PutMapping(value = "/{id}")
-    public Rebel updateRebel(@RequestBody RebelDTO rebelRequest) {
+    public Rebel updateRebel(@RequestBody RebelRequest rebelRequest) {
         log.info("Updating rebel");
         return rebelGateway.updateRebel(rebelRequest);
     }

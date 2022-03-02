@@ -1,4 +1,4 @@
-package com.rebels.alliance.domains.models;
+package com.rebels.alliance.domains;
 
 import org.springframework.stereotype.Component;
 
