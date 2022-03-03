@@ -1,8 +1,8 @@
 package com.rebels.alliance.gateways.controllers;
 
 import com.rebels.alliance.domains.Rebel;
-import com.rebels.alliance.gateways.controllers.requests.RebelRequest;
 import com.rebels.alliance.gateways.implementations.collection.RebelRepositoryCollection;
+import com.rebels.alliance.usecases.RebelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 @RestController
 @RequestMapping(value = "/rebels")
@@ -18,39 +17,42 @@ import java.util.function.Predicate;
 @Slf4j
 public class RebelController {
 
-    private final RebelRepositoryCollection rebelGateway;
+    private final RebelService rebelService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createRebel(@RequestBody Rebel rebelRequest) {
+    public Rebel createRebel(@RequestBody Rebel rebel) {
         log.info("Registering rebel");
-        rebelGateway.register(rebelRequest);
-        log.info("Rebel {} registered successfully", rebelRequest.getName());
+        rebelService.createRebel(rebel);
+        log.info("Rebel {} registered successfully", rebel.getName());
+        return rebel;
     }
 
     @GetMapping
     public List<Rebel> getAllRebels() {
         log.info("Listing all rebels");
-        return rebelGateway.findAll();
+        return rebelService.listAll();
     }
 
-    @GetMapping(value = "/{param}")
-    public List<Rebel> getBy(@PathVariable("param") Predicate<? super Rebel> param) {
+    @GetMapping(value = "/filter")
+    public <V> List<Rebel> getBy(@RequestParam String param, @RequestParam V value) {
         log.info("Searching rebels by {}", param);
-        return rebelGateway.findByParam(param);
+        return rebelService.listByParam(param, value);
     }
 
     @PutMapping(value = "/{id}")
-    public Rebel updateRebel(@RequestBody RebelRequest rebelRequest) {
+    public Rebel updateRebel(@RequestBody Rebel rebel) {
         log.info("Updating rebel");
-        return rebelGateway.updateRebel(rebelRequest);
+        return rebelService.updateRebel(rebel);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteRebel(@PathVariable("id") String rebelId) {
+    public void deleteRebel(@PathVariable("id") Long rebelId) {
+        log.info("Deleting Rebel (id = {})", rebelId);
         for (Rebel rebel : RebelRepositoryCollection.rebels) {
             if (Objects.equals(rebel.getId(), rebelId)) {
-                rebelGateway.delete(rebel);
+                rebelService.deleteRebel(rebel);
+                log.info("Rebel delete successful");
                 break;
             }
         }
