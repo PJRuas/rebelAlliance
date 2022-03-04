@@ -1,7 +1,6 @@
 package com.rebels.alliance.gateways.controllers;
 
 import com.rebels.alliance.domains.Rebel;
-import com.rebels.alliance.gateways.implementations.collection.RebelRepositoryCollection;
 import com.rebels.alliance.usecases.RebelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/rebels")
@@ -24,23 +22,27 @@ public class RebelController {
     public Rebel createRebel(@RequestBody Rebel rebel) {
         log.info("Registering rebel");
         rebelService.createRebel(rebel);
-        log.info("Rebel {} registered successfully", rebel.getName());
+        log.info("Rebel {} [id = {}] registered successfully", rebel.getName(), rebel.getId());
         return rebel;
     }
 
     @GetMapping
     public List<Rebel> getAllRebels() {
-        log.info("Listing all rebels");
-        return rebelService.listAll();
+        List<Rebel> result = rebelService.listAll();
+        log.info("Listing all rebels [{} result(s)]", result.size());
+        return result;
     }
 
     @GetMapping(value = "/filter")
+    @ResponseStatus(HttpStatus.FOUND)
     public <V> List<Rebel> getBy(@RequestParam String param, @RequestParam V value) {
-        log.info("Searching rebels by {}", param);
-        return rebelService.listByParam(param, value);
+        List<Rebel> result = rebelService.listByParam(param, value);
+        log.info("Searching rebels by {} [{} result(s)]", param, result.size());
+        return result;
     }
 
     @PutMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Rebel updateRebel(@RequestBody Rebel rebel) {
         log.info("Updating rebel");
         return rebelService.updateRebel(rebel);
@@ -48,13 +50,10 @@ public class RebelController {
 
     @DeleteMapping(value = "/{id}")
     public void deleteRebel(@PathVariable("id") Long rebelId) {
-        log.info("Deleting Rebel (id = {})", rebelId);
-        for (Rebel rebel : RebelRepositoryCollection.rebels) {
-            if (Objects.equals(rebel.getId(), rebelId)) {
-                rebelService.deleteRebel(rebel);
-                log.info("Rebel delete successful");
-                break;
-            }
-        }
+        Rebel rebelToDelete = new Rebel();
+        rebelToDelete.setId(rebelId);
+        rebelService.deleteRebel(rebelToDelete);
+        log.info("Deleting Rebel [id = {}]", rebelId);
+        log.info("Rebel delete successful");
     }
 }
