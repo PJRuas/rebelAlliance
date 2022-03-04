@@ -57,7 +57,7 @@ public class RebelValidator {
         }
 
         if (!rebelExists) {
-            validationErrors.add("Provided id ({}) does not match any rebel");
+            validationErrors.add("Provided id does not match any rebel");
         }
         return validationErrors;
     }
@@ -89,7 +89,7 @@ public class RebelValidator {
         }
 
         if (!rebelExists) {
-            validationErrors.add("Provided id ({}) does not match any rebel");
+            validationErrors.add("Provided id does not match any rebel");
         }
         return validationErrors;
     }
