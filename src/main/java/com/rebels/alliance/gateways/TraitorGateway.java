@@ -1,4 +1,22 @@
 package com.rebels.alliance.gateways;
 
-public interface TraitorGateway extends RebelGateway {
+import com.rebels.alliance.domains.Rebel;
+import com.rebels.alliance.domains.Traitor;
+
+import java.util.List;
+
+public interface TraitorGateway {
+    Traitor register(Traitor traitor);
+
+    void delete(Traitor traitor);
+
+    List<Traitor> findAll();
+
+    <V> List<Traitor> findByParam(String parameter, V value);
+
+    Traitor updateTraitor(Traitor traitor);
+
+    void complain(Rebel target, Rebel accuser);
+
+    Long[] checkComplaints(Rebel target);
 }

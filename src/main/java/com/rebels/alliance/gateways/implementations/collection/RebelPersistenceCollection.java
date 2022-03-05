@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
-public class RebelRepositoryCollection implements RebelGateway {
+public class RebelPersistenceCollection implements RebelGateway {
 
     static public List<Rebel> rebels = new ArrayList<>();
     private static long REBELID = 0;
