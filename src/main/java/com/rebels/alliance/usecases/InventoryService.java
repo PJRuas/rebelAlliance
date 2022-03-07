@@ -32,13 +32,28 @@ public class InventoryService {
         return maxPoints - getInventoryPoints(inventory);
     }
 
-//    private static EnumMap<Items, Integer> itemsValue = new EnumMap<Items, Integer>(Items.class) {
-//        static {
-//            itemsValue.put(Items.GUN, 4);
-//            itemsValue.put(Items.AMMUNITION, 3);
-//            itemsValue.put(Items.WATER, 2);
-//            itemsValue.put(Items.FOOD, 1);
-//        }
-//    };
+    public void addItem(Items item, Inventory inventory) {
+        Integer amount = inventory.getItems().getOrDefault(item, 0) + 1;
+        inventory.getItems().put(item, amount);
+        inventory.setPoints(getInventoryPoints(inventory));
+    }
+
+    public void removeItem(Items item, Inventory inventory) {
+        Integer amount = inventory.getItems().getOrDefault(item, 0);
+        if (amount > 0) {
+            amount -= 1;
+        }
+        inventory.getItems().put(item, amount);
+        inventory.setPoints(getInventoryPoints(inventory));
+    }
+
+    public void generateRandomItems(Inventory inventory) {
+        Items[] items = {Items.FOOD, Items.WATER, Items.AMMUNITION, Items.GUN};
+        while (getRemainingPoints(inventory) > 0) {
+            double limit = Math.min(4, getRemainingPoints(inventory));
+            double randomNumber = Math.random() * limit;
+            addItem(items[(int) randomNumber], inventory);
+        }
+    }
 
 }

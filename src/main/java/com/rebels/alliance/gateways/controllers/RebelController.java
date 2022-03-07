@@ -1,6 +1,7 @@
 package com.rebels.alliance.gateways.controllers;
 
 import com.rebels.alliance.domains.Rebel;
+import com.rebels.alliance.usecases.InventoryService;
 import com.rebels.alliance.usecases.RebelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,15 +17,25 @@ import java.util.List;
 public class RebelController {
 
     private final RebelService rebelService;
+    private final InventoryService inventoryService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Rebel createRebel(@RequestBody Rebel rebel) {
         log.info("Registering rebel");
+        inventoryService.generateRandomItems(rebel.getInventory());
         rebelService.createRebel(rebel);
         log.info("Rebel {} [id = {}] registered successfully", rebel.getName(), rebel.getId());
         return rebel;
     }
+
+    @PutMapping(value = "/{id}/inventory")
+    public Rebel generateInvetory(@PathVariable("id") Long rebelId) {
+        Rebel rebel = rebelService.listByParam("id", rebelId).get(0);
+        inventoryService.generateRandomItems(rebel.getInventory());
+        return rebel;
+    }
+
 
     @GetMapping
     public List<Rebel> getAllRebels() {
