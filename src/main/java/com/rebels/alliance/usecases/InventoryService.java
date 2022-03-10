@@ -26,7 +26,7 @@ public class InventoryService {
     public int getInventoryPoints(Inventory inventory) {
         int points = 0;
         for (Item item : inventory.getItems()) {
-            points += inventory.getItems().indexOf(item) * itemsValue.get(item);
+            points += item.getQtd() * itemsValue.get(ItemsName.valueOf(item.getName()));
         }
         return points;
     }
@@ -53,8 +53,8 @@ public class InventoryService {
         } else {
             inventory.getItems().add(item);
         }
+        inventory.setPoints(getInventoryPoints(inventory));
         return inventory;
-//        inventory.setPoints(getInventoryPoints(inventory));
     }
 
     public Inventory removeItem(Item item, Inventory inventory) {
@@ -71,8 +71,8 @@ public class InventoryService {
         } else {
             throw new BusinessValidationException("Item not found in inventory to remove");
         }
+        inventory.setPoints(getInventoryPoints(inventory));
         return inventory;
-//        inventory.setPoints(getInventoryPoints(inventory));
     }
 
     public void generateRandomItems(Inventory inventory) {
