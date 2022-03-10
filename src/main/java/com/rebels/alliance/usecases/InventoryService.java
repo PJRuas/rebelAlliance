@@ -3,12 +3,11 @@ package com.rebels.alliance.usecases;
 import com.rebels.alliance.domains.Inventory;
 import com.rebels.alliance.domains.Item;
 import com.rebels.alliance.domains.enums.ItemsName;
+import com.rebels.alliance.exceptions.BusinessValidationException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -36,33 +35,33 @@ public class InventoryService {
     }
 
     public Inventory addItem(Item item, Inventory inventory) {
-        Integer amount = (int) inventory.getItems().stream().filter(i -> i.getName() == item.getName()).count();
-        if (amount > 0) {
-            Item it = inventory.getItems().stream().filter(i -> i.getName() == item.getName()).collect(Collectors.toList()).get(0);
-            List<Item> its = inventory.getItems().stream().filter(i -> i.getName() != item.getName()).collect(Collectors.toList());
-            item.setQtd(item.getQtd() + it.getQtd());
-            inventory.setItems(null);
-            System.out.println("items sem o principal");
-            System.out.println(its);
-            inventory.setItems(its);
+        if (inventory.getItems().stream().anyMatch(i -> i.getName().equals(item.getName()))) {
+            inventory.getItems().forEach(i -> {
+                if (i.getName().equals(item.getName())){
+                    i.setQtd(i.getQtd() + item.getQtd());
+                }
+            });
+        } else {
+            inventory.getItems().add(item);
         }
-        inventory.getItems().add(item);
         return inventory;
 //        inventory.setPoints(getInventoryPoints(inventory));
     }
 
     public Inventory removeItem(Item item, Inventory inventory) {
-        Integer amount = (int) inventory.getItems().stream().filter(i -> i.getName() == item.getName()).count();
-        if (amount > 0) {
-            Item it = inventory.getItems().stream().filter(i -> i.getName() == item.getName()).collect(Collectors.toList()).get(0);
-            List<Item> its = inventory.getItems().stream().filter(i -> i.getName() != item.getName()).collect(Collectors.toList());
-            item.setQtd(it.getQtd() - item.getQtd());
-            inventory.setItems(null);
-            System.out.println("items sem o principal");
-            System.out.println(its);
-            inventory.setItems(its);
+        if (inventory.getItems().stream().anyMatch(i -> i.getName().equals(item.getName()))) {
+            inventory.getItems().forEach(i -> {
+                if (i.getName().equals(item.getName())){
+                    if(i.getQtd() < item.getQtd()) {
+                        throw new BusinessValidationException("Item insufficient amount");
+                    } else {
+                        i.setQtd(i.getQtd() - item.getQtd());
+                    }
+                }
+            });
+        } else {
+            throw new BusinessValidationException("Item not found in inventory to remove");
         }
-        inventory.getItems().add(item);
         return inventory;
 //        inventory.setPoints(getInventoryPoints(inventory));
     }
