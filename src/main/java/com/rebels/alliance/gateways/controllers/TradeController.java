@@ -14,7 +14,7 @@ public class TradeController {
 
     private final TradeService tradeService;
 
-    @PostMapping
+    @PutMapping
     public void tradeItems(@RequestBody TradeDto tradeDto){
         log.info("{}", tradeDto);
         tradeService.tradeItems(tradeDto);
