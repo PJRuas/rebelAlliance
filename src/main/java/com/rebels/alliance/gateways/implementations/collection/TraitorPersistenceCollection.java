@@ -19,9 +19,14 @@ public class TraitorPersistenceCollection implements TraitorGateway {
     static public List<Traitor> traitors = new ArrayList<>();
     @Getter
     static public Map<Long, Long[]> complaints = new HashMap<>();
+    public static Map<String, Long> reportUseLog = new HashMap<>();
+
+    private static void updateReportLog(String key) {
+        Long usages = reportUseLog.getOrDefault(key, 0L) + 1;
+        reportUseLog.put(key, usages);
+    }
 
     private static String[] getNullPropertyNames(Object source) {
-        Class clazz;
         final BeanWrapper src = new BeanWrapperImpl(source);
         PropertyDescriptor[] propertyDescriptors = src.getPropertyDescriptors();
 
@@ -37,8 +42,14 @@ public class TraitorPersistenceCollection implements TraitorGateway {
     }
 
     @Override
+    public Map<String, Long> getReportUsage() {
+        return reportUseLog;
+    }
+
+    @Override
     public Traitor register(Traitor traitor) {
         traitors.add(traitor);
+        updateReportLog("Registered");
         return traitor;
     }
 
@@ -47,10 +58,12 @@ public class TraitorPersistenceCollection implements TraitorGateway {
         traitors = traitors.stream()
                 .filter(tr -> tr.getId() != traitor.getId())
                 .collect(Collectors.toList());
+        updateReportLog("Deleted");
     }
 
     @Override
     public List<Traitor> findAll() {
+        updateReportLog("Searched");
         return traitors;
     }
 
@@ -86,6 +99,8 @@ public class TraitorPersistenceCollection implements TraitorGateway {
                     .collect(Collectors.toList()));
         }
 
+        updateReportLog("Searched by param [" + lowerCased + "]");
+
         return matches;
     }
 
@@ -94,6 +109,7 @@ public class TraitorPersistenceCollection implements TraitorGateway {
         for (Traitor tr : traitors) {
             if (Objects.equals(tr.getId(), traitor.getId())) {
                 BeanUtils.copyProperties(traitor, tr, getNullPropertyNames(traitor));
+                updateReportLog("Updated");
                 return tr;
             }
         }
@@ -112,6 +128,7 @@ public class TraitorPersistenceCollection implements TraitorGateway {
                     accusers[i] = accuserId;
                     complaints.put(target.getId(), accusers);
                     target.getReportStatus()[i] = true;
+                    updateReportLog("Accused");
                     break;
                 }
             }
@@ -120,6 +137,7 @@ public class TraitorPersistenceCollection implements TraitorGateway {
 
     @Override
     public Long[] checkComplaints(Rebel target) {
+        updateReportLog("Check complaints");
         return complaints.getOrDefault(target.getId(), new Long[3]);
     }
 }

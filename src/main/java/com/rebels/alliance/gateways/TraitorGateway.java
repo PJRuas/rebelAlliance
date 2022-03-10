@@ -4,8 +4,11 @@ import com.rebels.alliance.domains.Rebel;
 import com.rebels.alliance.domains.Traitor;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TraitorGateway {
+    Map<String, Long> getReportUsage();
+
     Traitor register(Traitor traitor);
 
     void delete(Traitor traitor);

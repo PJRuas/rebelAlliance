@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 public class RebelPersistenceCollection implements RebelGateway {
 
     static public List<Rebel> rebels = new ArrayList<>();
+    public static Map<String, Long> reportUseLog = new HashMap<>();
     private static long REBELID = 0;
 
     private static String[] getNullPropertyNames(Object source) {
-        Class clazz;
         final BeanWrapper src = new BeanWrapperImpl(source);
         PropertyDescriptor[] propertyDescriptors = src.getPropertyDescriptors();
 
@@ -33,12 +33,23 @@ public class RebelPersistenceCollection implements RebelGateway {
         return emptyNames.toArray(result);
     }
 
+    private void updateReportLog(String key) {
+        Long usages = reportUseLog.getOrDefault(key, 0L);
+        reportUseLog.put(key, usages + 1);
+    }
+
+    @Override
+    public Map<String, Long> getReportUsage() {
+        return reportUseLog;
+    }
+
     @Override
     public Rebel register(Rebel rebel) {
         Rebel newRebel = rebel;
         newRebel.setId(REBELID++);
         newRebel.getInventory().setOwnerId(newRebel.getId());
         rebels.add(newRebel);
+        updateReportLog("Registered");
         return newRebel;
     }
 
@@ -47,10 +58,12 @@ public class RebelPersistenceCollection implements RebelGateway {
         rebels = rebels.stream()
                 .filter(rb -> rb.getId() != rebel.getId())
                 .collect(Collectors.toList());
+        updateReportLog("Deleted");
     }
 
     @Override
     public List<Rebel> findAll() {
+        updateReportLog("Searched");
         return rebels;
     }
 
@@ -86,6 +99,8 @@ public class RebelPersistenceCollection implements RebelGateway {
                     .collect(Collectors.toList()));
         }
 
+        updateReportLog("Searched by param [" + lowerCased + "]");
+
         return matches;
     }
 
@@ -94,6 +109,7 @@ public class RebelPersistenceCollection implements RebelGateway {
         for (Rebel rb : rebels) {
             if (Objects.equals(rb.getId(), rebel.getId())) {
                 BeanUtils.copyProperties(rebel, rb, getNullPropertyNames(rebel));
+                updateReportLog("Updated");
                 return rb;
             }
         }

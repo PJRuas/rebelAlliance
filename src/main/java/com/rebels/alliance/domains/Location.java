@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class Location {
     String galaxyName;
-    Long latitude;
-    Long longitude;
+    Double latitude;
+    Double longitude;
 }
