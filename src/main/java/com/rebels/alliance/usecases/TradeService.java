@@ -11,8 +11,11 @@ public class TradeService {
     private final RebelService rebelService;
 
     public void tradeItems (TradeDto tradeDto) {
-        Rebel rebel1 = rebelService.findOneById(tradeDto.getRebel1Id().intValue());
-        Rebel rebel2 = rebelService.findOneById(tradeDto.getRebel2Id().intValue());
+        Rebel rebel1 = rebelService.listByParam("id", tradeDto.getRebel1Id().intValue()).get(0);
+        Rebel rebel2 = rebelService.listByParam("id", tradeDto.getRebel2Id().intValue()).get(0);
+
+//        Rebel rebel10 = rebelService.findOneById(tradeDto.getRebel1Id().intValue());
+//        Rebel rebel2 = rebelService.findOneById(tradeDto.getRebel2Id().intValue());
 
         tradeDto.getItemRebel1().forEach(item -> rebelService.removeItem(rebel1, item));
         tradeDto.getItemRebel2().forEach(item -> rebelService.removeItem(rebel2, item));

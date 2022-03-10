@@ -1,6 +1,6 @@
 package com.rebels.alliance.domains;
 
-import com.rebels.alliance.domains.enums.Items;
+import com.rebels.alliance.domains.enums.ItemsName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,6 +23,6 @@ public class Report {
     Long totalActive;
     Double rebelPercentage;
     Double traitorPercentage;
-    Map<Items, Double> averageResourcesPerRebel = new HashMap<>();
+    Map<ItemsName, Double> averageResourcesPerRebel = new HashMap<>();
     Long lostPointsDueToTraitors;
 }
