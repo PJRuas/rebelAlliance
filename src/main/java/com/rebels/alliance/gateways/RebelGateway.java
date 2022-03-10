@@ -18,4 +18,6 @@ public interface RebelGateway {
     <V> List<Rebel> findByParam(String parameter, V value);
 
     Rebel updateRebel(Rebel rebel);
+
+    Rebel findOneById(int id);
 }

@@ -1,6 +1,9 @@
 package com.rebels.alliance.domains.enums;
 
-public enum Items {
+import lombok.ToString;
+
+@ToString
+public enum ItemsName {
     GUN,
     AMMUNITION,
     WATER,

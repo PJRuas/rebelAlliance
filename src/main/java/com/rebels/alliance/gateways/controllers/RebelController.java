@@ -23,7 +23,7 @@ public class RebelController {
     @ResponseStatus(HttpStatus.CREATED)
     public Rebel createRebel(@RequestBody Rebel rebel) {
         log.info("Registering rebel");
-        inventoryService.generateRandomItems(rebel.getInventory());
+//        inventoryService.generateRandomItems(rebel.getInventory());
         rebelService.createRebel(rebel);
         log.info("Rebel {} [id = {}] registered successfully", rebel.getName(), rebel.getId());
         return rebel;

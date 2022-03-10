@@ -99,4 +99,11 @@ public class RebelPersistenceCollection implements RebelGateway {
         }
         return null;
     }
+
+    @Override
+    public Rebel findOneById(int id) {
+        return rebels.stream()
+                .filter(r -> r.getId() == id)
+                .collect(Collectors.toList()).get(0);
+    }
 }
