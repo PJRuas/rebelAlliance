@@ -11,6 +11,6 @@ import java.util.List;
 public class TradeDto {
     Long rebel1Id;
     Long rebel2Id;
-    List<Item> itemRebel1;
-    List<Item> itemRebel2;
+    List<Item> itemsRebel1;
+    List<Item> itemsRebel2;
 }
