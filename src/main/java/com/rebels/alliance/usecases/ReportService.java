@@ -3,7 +3,7 @@ package com.rebels.alliance.usecases;
 import com.rebels.alliance.domains.Rebel;
 import com.rebels.alliance.domains.Report;
 import com.rebels.alliance.domains.Traitor;
-import com.rebels.alliance.domains.enums.Items;
+import com.rebels.alliance.domains.enums.ItemsName;
 import com.rebels.alliance.gateways.RebelGateway;
 import com.rebels.alliance.gateways.TraitorGateway;
 import lombok.AllArgsConstructor;
@@ -62,13 +62,13 @@ public class ReportService {
 
         Long pointsLost = 0L;
 
-        for (Items item : inventoryService.getItemsValue().keySet()) {
-            Double quantity = 0D;
-            for (Rebel rebel : rebelGateway.findAll()) {
-                quantity += rebel.getInventory().getItems().get(item);
-            }
-            report.getAverageResourcesPerRebel().put(item, quantity / report.getRebelsActive());
-        }
+//        for (ItemsName item : inventoryService.getItemsValue().keySet()) {
+//            Double quantity = 0D;
+//            for (Rebel rebel : rebelGateway.findAll()) {
+//                quantity += rebel.getInventory().getItems().get(item);
+//            }
+//            report.getAverageResourcesPerRebel().put(item, quantity / report.getRebelsActive());
+//        }
 
         for (Traitor traitor : traitorGateway.findAll()) {
             pointsLost += traitor.getInventory().getPoints();
