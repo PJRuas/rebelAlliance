@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Service
@@ -26,7 +27,7 @@ public class InventoryService {
     public int getInventoryPoints(Inventory inventory) {
         int points = 0;
         for (Item item : inventory.getItems()) {
-            points += item.getQtd() * itemsValue.get(ItemsName.valueOf(item.getName()));
+            points += item.getQtd() * itemsValue.get(ItemsName.valueOf(item.getName().toUpperCase(Locale.ROOT)));
         }
         return points;
     }
@@ -46,7 +47,7 @@ public class InventoryService {
     public Inventory addItem(Item item, Inventory inventory) {
         if (inventory.getItems().stream().anyMatch(i -> i.getName().equals(item.getName()))) {
             inventory.getItems().forEach(i -> {
-                if (i.getName().equals(item.getName())){
+                if (i.getName().equals(item.getName())) {
                     i.setQtd(i.getQtd() + item.getQtd());
                 }
             });
@@ -60,8 +61,8 @@ public class InventoryService {
     public Inventory removeItem(Item item, Inventory inventory) {
         if (inventory.getItems().stream().anyMatch(i -> i.getName().equals(item.getName()))) {
             inventory.getItems().forEach(i -> {
-                if (i.getName().equals(item.getName())){
-                    if(i.getQtd() < item.getQtd()) {
+                if (i.getName().equals(item.getName())) {
+                    if (i.getQtd() < item.getQtd()) {
                         throw new BusinessValidationException("Item insufficient amount");
                     } else {
                         i.setQtd(i.getQtd() - item.getQtd());
@@ -76,7 +77,7 @@ public class InventoryService {
     }
 
     public void generateRandomItems(Inventory inventory) {
-        Item[] items = {new Item(ItemsName.FOOD.toString(),2), new Item(ItemsName.WATER.toString(), 10), new Item(ItemsName.AMMUNITION.toString(),10), new Item(ItemsName.GUN.toString(), 5)};
+        Item[] items = {new Item(ItemsName.FOOD.toString(), 2), new Item(ItemsName.WATER.toString(), 10), new Item(ItemsName.AMMUNITION.toString(), 10), new Item(ItemsName.GUN.toString(), 5)};
         while (getRemainingPoints(inventory) > 0) {
             double limit = Math.min(4, getRemainingPoints(inventory));
             double randomNumber = Math.random() * limit;
