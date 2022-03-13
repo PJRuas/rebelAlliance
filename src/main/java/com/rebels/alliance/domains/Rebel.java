@@ -1,6 +1,7 @@
 package com.rebels.alliance.domains;
 
 import com.rebels.alliance.domains.enums.Gender;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
