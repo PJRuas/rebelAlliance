@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @ToString
-public class TradeDto {
+public class TradeRequest {
     Long rebel1Id;
     Long rebel2Id;
     List<Item> itemsRebel1;
