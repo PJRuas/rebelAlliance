@@ -8,6 +8,7 @@ import com.rebels.alliance.domains.Rebel;
 import com.rebels.alliance.domains.enums.Gender;
 import com.rebels.alliance.gateways.controllers.requests.RebelRequest;
 import com.rebels.alliance.usecases.RebelService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -23,12 +24,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -45,16 +47,20 @@ class RebelControllerTest {
     public RebelRequest getRebelRequest(){
         Inventory inventory = new Inventory();
         inventory.setItems(items);
+
         Location location = new Location();
         location.setGalaxyName("Via láctea");
         location.setLongitude(22D);
         location.setLongitude(25D);
+
         RebelRequest rebel = new RebelRequest();
+
         rebel.setAge(18);
         rebel.setGender(Gender.ALIEN);
         rebel.setInventory(inventory);
         rebel.setLocation(location);
         rebel.setName("Asuka");
+
         return rebel;
     }
 
@@ -83,5 +89,22 @@ class RebelControllerTest {
         Assertions.assertEquals(rebel.getAge(), capturedRebel.getAge());
         Assertions.assertEquals(rebel.getLocation(), capturedRebel.getLocation());
         Assertions.assertEquals(rebel.getGender(), capturedRebel.getGender());
+    }
+
+    @Test
+    public void shouldFindARebelById() throws Exception{
+
+        RebelRequest rebelRequest = getRebelRequest();
+        rebelRequest.setId(1L);
+        Rebel rebel = rebelRequest.toRebel();
+        List<Rebel> rebels = new ArrayList<>(List.of(rebel));
+
+        Mockito.when(rebelService.listByParam("id", rebelRequest.getId())).thenReturn(rebels);
+
+        mvc.perform(
+                get("/rebels/filter/?param=id&value=" + 1)
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isFound());
+
     }
 }
