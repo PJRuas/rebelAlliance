@@ -2,6 +2,7 @@ package com.rebels.alliance.gateways.implementations.collection;
 
 import com.rebels.alliance.domains.Rebel;
 import com.rebels.alliance.gateways.RebelGateway;
+import com.rebels.alliance.usecases.InventoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -16,6 +17,7 @@ public class RebelPersistenceCollection implements RebelGateway {
 
     static public List<Rebel> rebels = new ArrayList<>();
     public static Map<String, Long> reportUseLog = new HashMap<>();
+    private static InventoryService inventoryService;
     private static long REBELID = 0;
 
     private static String[] getNullPropertyNames(Object source) {
@@ -48,6 +50,8 @@ public class RebelPersistenceCollection implements RebelGateway {
         Rebel newRebel = rebel;
         newRebel.setId(REBELID++);
         newRebel.getInventory().setOwnerId(newRebel.getId());
+//        newRebel.getInventory().setPoints(inventoryService.getInventoryPoints(newRebel.getInventory()));
+        newRebel.setReportStatus(new boolean[]{false, false, false});
         rebels.add(newRebel);
         updateReportLog("Registered");
         return newRebel;

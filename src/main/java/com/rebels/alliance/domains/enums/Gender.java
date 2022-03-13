@@ -1,6 +1,6 @@
 package com.rebels.alliance.domains.enums;
 
-public enum Genders {
+public enum Gender {
     MALE,
     FEMALE,
     NONBINARY,
