@@ -18,12 +18,10 @@ public class TraitorService {
     private final RebelService rebelService;
 
     public Traitor markTraitor(Rebel rat) {
-        if (!Arrays.asList(rat.getReportStatus()).contains(false)) {
-            log.info("rebel id {}", rat.getId());
+        if (!Arrays.asList(rat.getReportStatus()).contains((boolean) false)) {
             Traitor markedTraitor = new Traitor(rat);
             traitorGateway.register(markedTraitor);
             rebelService.deleteRebel(rat);
-            log.info("{}", markedTraitor.getId());
             return markedTraitor;
         }
         return new Traitor();
@@ -45,5 +43,9 @@ public class TraitorService {
 
     public <V> List<Traitor> listByParam(String param, V value) {
         return traitorGateway.findByParam(param, value);
+    }
+
+    public void delete(Traitor traitorToDelete) {
+        traitorGateway.delete(traitorToDelete);
     }
 }

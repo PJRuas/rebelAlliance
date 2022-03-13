@@ -9,7 +9,6 @@ import java.util.List;
 @Data
 public class Inventory {
     Long ownerId;
-    boolean status;
     List<Item> items;
     int points;
 }

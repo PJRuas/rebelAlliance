@@ -1,4 +1,4 @@
-package com.rebels.alliance.gateways.controllers.requests;
+package com.rebels.alliance.gateways.controllers.responses;
 
 import com.rebels.alliance.domains.Inventory;
 import com.rebels.alliance.domains.Location;
@@ -7,35 +7,29 @@ import com.rebels.alliance.domains.enums.Gender;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-
 @Data
-public class RebelRequest {
+public class RebelResponse {
 
-    @ApiModelProperty(value = "Rebel's database ID (auto-generated when creating new",
+    @ApiModelProperty(value = "Rebel's database ID (auto-generated when creating new)",
             example = "23")
     private Long id;
 
-    @NotBlank
-    @ApiModelProperty(required = true,
+    @ApiModelProperty(
             value = "Rebel's name",
             example = "Frodo Baggins")
     private String name;
 
-    @NotBlank
-    @ApiModelProperty(required = true,
-            value = "Rebel's name",
+    @ApiModelProperty(
+            value = "Rebel's age",
             example = "602")
-    private Integer age;
+    private int age;
 
-    @NotBlank
-    @ApiModelProperty(required = true,
+    @ApiModelProperty(
             value = "Rebel's gender",
             example = "OTHER")
     private Gender gender;
 
-    @NotBlank
-    @ApiModelProperty(required = true,
+    @ApiModelProperty(
             value = "Rebel's current location",
             example = "{" +
                     "\"galaxyName\":\"Middle-earth\"," +
@@ -44,14 +38,12 @@ public class RebelRequest {
                     "}")
     private Location location;
 
-    @NotBlank
-    @ApiModelProperty(required = false,
+    @ApiModelProperty(
             value = "Rebel's reports on system",
             example = "[false, false, false]")
     private boolean[] reportStatus;
 
-    @NotBlank
-    @ApiModelProperty(required = true,
+    @ApiModelProperty(
             value = "Rebel's initial possessions",
             example = "{" +
                     "\"items\": " +
@@ -62,15 +54,14 @@ public class RebelRequest {
                     "}")
     private Inventory inventory;
 
-    public Rebel toRebel() {
-        Rebel rebel = new Rebel();
-        rebel.setId(id);
-        rebel.setName(name);
-        rebel.setAge(age);
-        rebel.setGender(gender);
-        rebel.setLocation(location);
-        rebel.setReportStatus(reportStatus);
-        rebel.setInventory(inventory);
-        return rebel;
+
+    public RebelResponse(Rebel rebel) {
+        id = rebel.getId();
+        name = rebel.getName();
+        age = rebel.getAge();
+        gender = rebel.getGender();
+        location = rebel.getLocation();
+        reportStatus = rebel.getReportStatus();
+        inventory = rebel.getInventory();
     }
 }
