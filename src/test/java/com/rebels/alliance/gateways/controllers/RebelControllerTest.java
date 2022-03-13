@@ -96,8 +96,7 @@ class RebelControllerTest {
 
         RebelRequest rebelRequest = getRebelRequest();
         rebelRequest.setId(1L);
-        Rebel rebel = rebelRequest.toRebel();
-        List<Rebel> rebels = new ArrayList<>(List.of(rebel));
+        List<Rebel> rebels = getListOfRebels();
 
         Mockito.when(rebelService.listByParam("id", rebelRequest.getId())).thenReturn(rebels);
 
@@ -106,5 +105,38 @@ class RebelControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isFound());
 
+    }
+
+    @Test
+    public void shouldListAllRebels() throws Exception{
+
+        List<Rebel> rebels = getListOfRebels();
+
+        Mockito.when(rebelService.listAll()).thenReturn(rebels);
+
+        mvc.perform(
+                get("/rebels")
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+
+    }
+
+//    GenerateInventory
+    @Test
+    public void shouldGenerateInventory(){
+        
+    }
+
+//    Update
+
+
+//    Delete
+
+    private List<Rebel> getListOfRebels() {
+        RebelRequest rebelRequest = getRebelRequest();
+        rebelRequest.setId(1L);
+        Rebel rebel = rebelRequest.toRebel();
+        List<Rebel> rebels = new ArrayList<>(List.of(rebel));
+        return rebels;
     }
 }
