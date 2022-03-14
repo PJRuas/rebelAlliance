@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @Service
@@ -27,15 +26,16 @@ public class InventoryService {
     public int getInventoryPoints(Inventory inventory) {
         int points = 0;
         for (Item item : inventory.getItems()) {
-            points += item.getQtd() * itemsValue.get(ItemsName.valueOf(item.getName().toUpperCase(Locale.ROOT)));
+            points += item.getQtd() * itemsValue.get(ItemsName.valueOf(item.getName().toUpperCase()));
         }
+        System.out.println(points);
         return points;
     }
 
     public int getItemsPoints(List<Item> items) {
         int points = 0;
         for (Item item : items) {
-            points += item.getQtd() * itemsValue.get(ItemsName.valueOf(item.getName()));
+            points += item.getQtd() * itemsValue.get(ItemsName.valueOf(item.getName().toUpperCase()));
         }
         return points;
     }

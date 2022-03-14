@@ -28,6 +28,7 @@ public class RebelController {
         log.info("Registering rebel");
         Rebel rebel = rebelRequest.toRebel();
 //        inventoryService.generateRandomItems(rebel.getInventory());
+        rebel.getInventory().setPoints(inventoryService.getInventoryPoints(rebel.getInventory()));
         rebelService.createRebel(rebel);
         log.info("Rebel {} [id = {}] registered successfully", rebel.getName(), rebel.getId());
         return new RebelResponse(rebel);
