@@ -1,6 +1,7 @@
 package com.rebels.alliance.usecases.validators;
 
 import com.rebels.alliance.domains.Inventory;
+import com.rebels.alliance.domains.Item;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,14 @@ class InventoryValidatorTest {
 
     private InventoryValidator validator = new InventoryValidator();
 
+    @Test
+    public void validateInventory(){
+        Inventory inventory = new Inventory();
+        inventory.setItems(List.of(new Item("GUN", 1)));
+        List<String> validationResult = validator.validate(inventory);
+
+        Assertions.assertEquals(validationResult, List.of());
+    }
 
     @Test
     public void validateNullInventory(){
@@ -37,6 +46,14 @@ class InventoryValidatorTest {
         List<String> validationErrors = validator.validateItem(null);
 
         Assertions.assertEquals(validationErrors, List.of("item not provided"));
+    }
+
+    @Test
+    public void validateItem(){
+        Item item = new Item("GUN", 1);
+        List<String> validationResult = validator.validateItem(item);
+
+        Assertions.assertEquals(validationResult, List.of());
     }
 
 }
