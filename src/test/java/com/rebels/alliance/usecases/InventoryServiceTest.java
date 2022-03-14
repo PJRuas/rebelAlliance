@@ -83,30 +83,24 @@ class InventoryServiceTest {
                 inventoryService.removeItem(item, inventory));
     }
 
-//    @Test
-//    void shouldThrowException_when_removeInvalidItem(){
-//        List<Item> items = new ArrayList<>();
-//        items.add(item);
-//
-//        Inventory inventory = emptyInventory;
-//        inventory.setItems(items);
-//
-//        inventoryService.removeItem(item, inventory);
-//        System.out.printf(inventory.toString());
-//
-//        inventoryService.removeItem(item, inventory);
-//        inventoryService.removeItem(item, inventory);
-//        inventoryService.removeItem(item, inventory);
-//
-//        Assertions.assertThrows(BusinessValidationException.class, () ->
-//                inventoryService.removeItem(item, inventory));
-//    }
+    @Test
+    void shouldThrowException_when_removeInvalidItem(){
+        List<Item> items = new ArrayList<>();
+        items.add(item);
+
+        Inventory inventory = emptyInventory;
+        inventory.setItems(items);
+
+        inventoryService.removeItem(item, inventory);
+
+        Assertions.assertThrows(BusinessValidationException.class, () ->
+                inventoryService.removeItem(new Item("GUN", 2), inventory));
+    }
 
     @Test
-    void shoulnotgenerateRandomItems_when_invalidInventory() {
+    void shoulNotgenerateRandomItems_when_invalidInventory() {
         Inventory inventory = new Inventory();
         inventory.setItems(emptyItems);
-//        inventoryService.generateRandomItems(inventory);
 
         Assertions.assertThrows(IllegalArgumentException.class, ()->
                 inventoryService.generateRandomItems(inventory));
