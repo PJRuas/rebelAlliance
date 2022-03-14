@@ -54,6 +54,7 @@ public class RebelValidator {
 
         if (rebel.getId() == null) {
             validationErrors.add("Rebel's Id not provided");
+            return validationErrors;
         }
 
         if (!rebelExists) {
@@ -86,6 +87,7 @@ public class RebelValidator {
 
         if (rebel.getId() == null) {
             validationErrors.add("Rebel's Id not provided");
+            return validationErrors;
         }
 
         if (!rebelExists) {
