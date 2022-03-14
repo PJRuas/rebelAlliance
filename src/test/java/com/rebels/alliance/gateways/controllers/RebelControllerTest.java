@@ -9,12 +9,10 @@ import com.rebels.alliance.domains.enums.Gender;
 import com.rebels.alliance.gateways.controllers.requests.RebelRequest;
 import com.rebels.alliance.usecases.InventoryService;
 import com.rebels.alliance.usecases.RebelService;
-import io.swagger.models.auth.In;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,9 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -143,9 +139,48 @@ class RebelControllerTest {
     }
 
 //    Update
+    @Test
+    public void shouldUpdateRebel() throws Exception{
+        RebelRequest rebelRequest = getRebelRequest();
+        String jsonRebel = mapper.writeValueAsString(rebelRequest);
+        Rebel rebel = rebelRequest.toRebel();
+        rebel.setId(1L);
+
+        Mockito.when(rebelService.updateRebel(any(Rebel.class))).thenReturn(rebel);
+
+        mvc.perform(
+                put("/rebels")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRebel)
+        ).andExpect(status().isOk());
+
+        ArgumentCaptor<Rebel> captor = ArgumentCaptor.forClass(Rebel.class);
+
+        Mockito.verify(rebelService).updateRebel(captor.capture());
+
+        Rebel capturedRebel = captor.getValue();
+
+        Assertions.assertEquals(rebel.getName(), capturedRebel.getName());
+        Assertions.assertEquals(rebel.getAge(), capturedRebel.getAge());
+        Assertions.assertEquals(rebel.getLocation(), capturedRebel.getLocation());
+        Assertions.assertEquals(rebel.getGender(), capturedRebel.getGender());
+    }
 
 
 //    Delete
+    @Test
+    public void shouldDeleteRebel() throws Exception{
+
+        List<Rebel> rebels = getListOfRebels();
+
+        Mockito.doNothing().when(rebelService).deleteRebel(rebels.get(0));
+
+        mvc.perform(
+                delete("/rebels/" + rebels.get(0).getId())
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+
+    }
 
     private List<Rebel> getListOfRebels() {
         RebelRequest rebelRequest = getRebelRequest();
