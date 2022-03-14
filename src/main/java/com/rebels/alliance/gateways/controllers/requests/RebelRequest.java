@@ -64,13 +64,13 @@ public class RebelRequest {
 
     public Rebel toRebel() {
         Rebel rebel = new Rebel();
-        rebel.setId(id);
-        rebel.setName(name);
-        rebel.setAge(age);
-        rebel.setGender(gender);
-        rebel.setLocation(location);
-        rebel.setReportStatus(reportStatus);
-        rebel.setInventory(inventory);
+        rebel.setId(getId());
+        rebel.setName(getName());
+        rebel.setAge(getAge());
+        rebel.setGender(getGender());
+        rebel.setLocation(getLocation());
+        rebel.setReportStatus(getReportStatus());
+        rebel.setInventory(getInventory());
         return rebel;
     }
 }
