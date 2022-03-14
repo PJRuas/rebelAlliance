@@ -11,7 +11,8 @@ import java.util.List;
 public class InventoryValidator {
     public List<String> validateItem(Item item) {
         List<String> validationErrors = new ArrayList<>();
-        //validation
+        if(item == null) return List.of("item not provided");
+
         return validationErrors;
     }
 
