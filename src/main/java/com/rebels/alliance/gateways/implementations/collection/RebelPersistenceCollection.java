@@ -1,6 +1,7 @@
 package com.rebels.alliance.gateways.implementations.collection;
 
 import com.rebels.alliance.domains.Rebel;
+import com.rebels.alliance.domains.Traitor;
 import com.rebels.alliance.gateways.RebelGateway;
 import com.rebels.alliance.usecases.InventoryService;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +19,7 @@ public class RebelPersistenceCollection implements RebelGateway {
     static public List<Rebel> rebels = new ArrayList<>();
     public static Map<String, Long> reportUseLog = new HashMap<>();
     private static InventoryService inventoryService;
+    private static TraitorPersistenceCollection traitorPersistenceCollection = new TraitorPersistenceCollection();
     private static long REBELID = 0;
 
     private static String[] getNullPropertyNames(Object source) {
@@ -40,6 +42,22 @@ public class RebelPersistenceCollection implements RebelGateway {
         reportUseLog.put(key, usages + 1);
     }
 
+    private Long generateID() {
+        Set<Long> usedIDs = new TreeSet<>();
+        for (Traitor traitor : traitorPersistenceCollection.findAll()) {
+            usedIDs.add(traitor.getId());
+        }
+        for (Rebel rebel : findAll()) {
+            usedIDs.add(rebel.getId());
+        }
+        for (Long i = 0L; i < REBELID; i++) {
+            if (!usedIDs.contains(i)) {
+                return i;
+            }
+        }
+        return REBELID++;
+    }
+
     @Override
     public Map<String, Long> getReportUsage() {
         return reportUseLog;
@@ -48,7 +66,7 @@ public class RebelPersistenceCollection implements RebelGateway {
     @Override
     public Rebel register(Rebel rebel) {
         Rebel newRebel = rebel;
-        newRebel.setId(REBELID++);
+        newRebel.setId(generateID());
         newRebel.getInventory().setOwnerId(newRebel.getId());
 //        newRebel.getInventory().setPoints(inventoryService.getInventoryPoints(newRebel.getInventory()));
         newRebel.setReportStatus(new boolean[]{false, false, false});
