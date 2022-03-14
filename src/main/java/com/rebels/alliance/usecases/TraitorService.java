@@ -18,8 +18,11 @@ public class TraitorService {
     private final RebelService rebelService;
 
     public Traitor markTraitor(Rebel rat) {
-        if (!Arrays.asList(rat.getReportStatus()).contains((boolean) false)) {
+        boolean[] complaints = rat.getReportStatus();
+        if (complaints[0] && complaints[1] && complaints[2]) {
             Traitor markedTraitor = new Traitor(rat);
+            log.info("{}", markedTraitor.getReportStatus());
+            log.info("{}", Arrays.asList(rat.getReportStatus()).contains(false));
             traitorGateway.register(markedTraitor);
             rebelService.deleteRebel(rat);
             return markedTraitor;
