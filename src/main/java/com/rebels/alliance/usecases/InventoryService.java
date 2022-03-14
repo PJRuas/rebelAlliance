@@ -5,12 +5,14 @@ import com.rebels.alliance.domains.Item;
 import com.rebels.alliance.domains.enums.ItemsName;
 import com.rebels.alliance.exceptions.BusinessValidationException;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Getter
 @AllArgsConstructor
 public class InventoryService {
 

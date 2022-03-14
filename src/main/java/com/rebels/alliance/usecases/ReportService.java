@@ -1,5 +1,6 @@
 package com.rebels.alliance.usecases;
 
+import com.rebels.alliance.domains.Item;
 import com.rebels.alliance.domains.Rebel;
 import com.rebels.alliance.domains.Report;
 import com.rebels.alliance.domains.Traitor;
@@ -62,13 +63,17 @@ public class ReportService {
 
         Long pointsLost = 0L;
 
-//        for (ItemsName item : inventoryService.getItemsValue().keySet()) {
-//            Double quantity = 0D;
-//            for (Rebel rebel : rebelGateway.findAll()) {
-//                quantity += rebel.getInventory().getItems().get(item);
-//            }
-//            report.getAverageResourcesPerRebel().put(item, quantity / report.getRebelsActive());
-//        }
+        for (ItemsName item : inventoryService.getItemsValue().keySet()) {
+            Double quantity = 0D;
+            for (Rebel rebel : rebelGateway.findAll()) {
+                for (Item rebelItem : rebel.getInventory().getItems()) {
+                    if (ItemsName.valueOf(rebelItem.getName()) == item) {
+                        quantity += rebelItem.getQtd();
+                    }
+                }
+            }
+            report.getAverageResourcesPerRebel().put(item, quantity / report.getRebelsActive());
+        }
 
         for (Traitor traitor : traitorGateway.findAll()) {
             pointsLost += traitor.getInventory().getPoints();
