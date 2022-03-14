@@ -7,7 +7,9 @@ import com.rebels.alliance.domains.Location;
 import com.rebels.alliance.domains.Rebel;
 import com.rebels.alliance.domains.enums.Gender;
 import com.rebels.alliance.gateways.controllers.requests.RebelRequest;
+import com.rebels.alliance.usecases.InventoryService;
 import com.rebels.alliance.usecases.RebelService;
+import io.swagger.models.auth.In;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,8 +30,7 @@ import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -43,6 +44,8 @@ class RebelControllerTest {
 
     @MockBean
     private RebelService rebelService;
+    @MockBean
+    private InventoryService inventoryService;
 
     public RebelRequest getRebelRequest(){
         Inventory inventory = new Inventory();
@@ -123,8 +126,20 @@ class RebelControllerTest {
 
 //    GenerateInventory
     @Test
-    public void shouldGenerateInventory(){
-        
+    public void shouldGenerateInventory() throws Exception{
+
+        RebelRequest rebelRequest = getRebelRequest();
+        rebelRequest.setId(1L);
+        List<Rebel> rebels = getListOfRebels();
+
+        Mockito.when(rebelService.listByParam("id", rebelRequest.getId())).thenReturn(rebels);
+        Inventory inventory = rebelRequest.getInventory();
+        Mockito.doNothing().when(inventoryService).generateRandomItems(inventory);
+
+        mvc.perform(
+                put("/rebels/1/inventory")
+        ).andExpect(status().isOk());
+
     }
 
 //    Update
